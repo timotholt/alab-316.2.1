@@ -9,7 +9,7 @@ until you are within 3 spaces of him.
 2. Move your ship to any square on the board with the mouse.  The DOM is
 updated to draw the ship in the square you click on.
 
-3. To help you find hii, use your ears to listen to the sonar.  Higher pings = closer. Lower pings = farther.  The difference is subtle!
+3. To help you find him, use your ears to listen to the sonar.  Higher pings = closer. Lower pings = farther.  The difference is subtle!
 
 4. When you get withion 3 spaces of the stranded sailor, you will see him!
 
