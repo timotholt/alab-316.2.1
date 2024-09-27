@@ -499,23 +499,26 @@ function gameLoop() {
 
     else {
 
+        // If the ship moved closer to the sailor
         if (distance < lastDistance) {
             if (musicStarted) {
                 // we are getting closer
                 volume = Math.max(1, (gameWidth - distance) / gameWidth) - 0.2;
-                console.log(`volume = ${volume}`);
+                // console.log(`volume = ${volume}`);
                 cueMovingCloser.volume = volume;
                 cueMovingCloser.currentTime = 0;
                 cueMovingCloser.play();
             }
             lastDistance = distance;
         }
+
+        // If the ship moved away from the sailor
         else if (distance > lastDistance) {
 
             if (musicStarted) {
                 // we are getting closer
                 volume = Math.max(1, (gameWidth - distance) / gameWidth - 0.2);
-                console.log(`volume = ${volume}`);
+                // console.log(`volume = ${volume}`);
                 cueMovingAway.volume = volume;
                 cueMovingAway.currentTime = 0;
                 cueMovingAway.play();
