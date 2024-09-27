@@ -1,32 +1,30 @@
-// debugger;
-
-
 console.log(`hello world from alab316.2.1`);
-
-
-// debugger;
 
 // Get current window shape
 const windowHeight = window.innerHeight;
 const windowWidth = window.innerWidth;
 
-// For music
+// Create audio object for the main music played in the game
 const rescueMusic = new Audio(`./rescue.mp3`);
 const rescueVolume = 0.3;
 rescueMusic.volume = rescueVolume;
 
+// Create audio object for the victory music
 const victoryMusic = new Audio(`./ff14-fanfare.mp3`);
 const victoryVolume = 1.0;
 victoryMusic.volume = victoryVolume;
 
 let musicStarted = false;
 
-// Audio cues
+//================================================
+// Create audio for the audio cues
 // 1. A man was spotted on the high seas!
 // 2. His radio signal is getting stronger
 // 3. His radio signal is getting weaker
 // 4. Man overboard!
 // 5. Rescued!
+//================================================
+
 const cueManOverboard = new Audio(`./manoverboard.mp3`);
 const cueManSpotted   = new Audio(`./manspotted.mp3`);
 const cueManLost      = new Audio(`./manlost.mp3`);
@@ -217,6 +215,10 @@ function handleClick(event) {
     let indexCol = event.target.id.indexOf(`c`);
     sRow = event.target.id.substring(1, indexCol-1);
     sCol = event.target.id.substring(indexCol+1);
+
+    // If the distance is more >= 2 then it's an illegal move
+    if (distanceBetween(sRow, sCol, shipRow, shipCol) >= 2)
+        return;
 
     // Move the ship
     // console.log(`${event.target.id} (row ${sRow}, col ${sCol}) was clicked:`, event);
@@ -552,7 +554,8 @@ window.alert(
 
 window.alert(
     `Coast Guard ${ring}Rescue!\n\n` +
-    `Note: You can't enter rough water ${wave} or rocks. Steer around them.${island}\n\n`
+    `Note: You can only move one square at a time, and you can't enter rough` +
+    `water ${wave} or rocks ${island}. Steer around them.\n\n`
 );
 
 
