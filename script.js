@@ -231,8 +231,6 @@ function handleClick(event) {
 // 
 function createGameBoard() {
 
-    // debugger;
-
     const appDiv = document.getElementById(`app`);
 
     // Erase any existing children DIVs
@@ -243,8 +241,6 @@ function createGameBoard() {
         terrainMap[row] = [];
         for (let col = 0; col < gameWidth; col++) {
             terrainMap[row][col] = blank;
-
-            console.log(`terrainMap[${row}][${col}] = "${terrainMap[row][col]}"`);
         }
     }
 
@@ -293,8 +289,6 @@ function createGameBoard() {
             colElement.id = cellId;
             // colElement.innerHTML = cellId;
 
-            debugger;
-            
             // Copy any islands or waves
             colElement.innerHTML = terrainMap[row][col];
             console.log(colElement.innerHTML);
