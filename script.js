@@ -5,7 +5,8 @@ const windowHeight = window.innerHeight;
 const windowWidth = window.innerWidth;
 
 // Create audio object for the main music played in the game
-const rescueMusic = new Audio(`./rescue.mp3`);
+// const rescueMusic = new Audio(`./rescue.mp3`);
+const rescueMusic = new Audio(`./topguntheme.mp3`);
 const rescueVolume = 0.3;
 rescueMusic.volume = rescueVolume;
 
