@@ -7,7 +7,7 @@ const windowWidth = window.innerWidth;
 // Create audio object for the main music played in the game
 // const rescueMusic = new Audio(`./rescue.mp3`);
 const rescueMusic = new Audio(`./topguntheme.mp3`);
-const rescueVolume = 0.3;
+const rescueVolume = 0.6;
 rescueMusic.volume = rescueVolume;
 
 // Create audio object for the victory music
@@ -54,7 +54,7 @@ const randomInt = (max) => Math.floor(Math.random() * max);
 const randRow = () => randomInt(gameHeight);
 const randCol = () => randomInt(gameWidth);
 
-// Distance from ship to swimmer
+// Distance from ship to crash site
 const distanceOnTop = 0;          // Ship on top of the swimmer
 const distanceIsClose = 3;        // <= 3 is close
 const distanceIsMedium = 6;       // <= 5 is medium
@@ -65,18 +65,11 @@ let shipCol = 0;
 let swimmerRow = gameHeight - 1;
 let swimmerCol = gameWidth - 1;
 
-// Change background color of x,y
-function changeText(row, col, text){
-
-    // console.log(`changeText(${row},${col},"${text}")`);
+// Change the text of the div with the specified row/col
+function changeText(row, col, text) {
+    // Calculate name of div
     let address = `r${row}-c${col}`;
-    // console.log(`Changing the text of cell ${address}`);
-
     let cell = document.getElementById(address);
-    // console.log(`document.getElementById(${address}) returned ${cell}`);
-    // if (color)
-    //     cell.style.backgroundColor = color;
-
     cell.innerHTML = text;
 }
 
@@ -123,7 +116,7 @@ function drawShip() {
 let lastDrawnSwimmerRow = swimmerRow;
 let lastDrawnSwimmerCol = swimmerCol;
 let swimmerVisible = false;
-let sailorName = null;
+let pilotName = null;
 
 function drawSwimmer() {
 
@@ -136,10 +129,10 @@ function drawSwimmer() {
             return;
 
             // console.log(`1. Erasing old swimmer location because it was last drawn at ${lastDrawnSwimmerRow} ${lastDrawnSwimmerCol}`);
-            changeText(lastDrawnSwimmerRow, lastDrawnSwimmerCol, terrainMap[lastDrawnSwimmerRow][lastDrawnSwimmerCol] + blank);
-            lastDrawnSwimmerRow = swimmerRow;
-            lastDrawnSwimmerCol = swimmerCol;
-            swimmerVisible = false;
+            // changeText(lastDrawnSwimmerRow, lastDrawnSwimmerCol, terrainMap[lastDrawnSwimmerRow][lastDrawnSwimmerCol] + blank);
+            // lastDrawnSwimmerRow = swimmerRow;
+            // lastDrawnSwimmerCol = swimmerCol;
+            // swimmerVisible = false;
         }
 
         changeText(swimmerRow, swimmerCol, terrainMap[swimmerRow][swimmerCol] + swimmer);
@@ -274,7 +267,7 @@ function createGameBoard() {
 
             const colElement = document.createElement(`div`);
             let cellId = "r" + row + "-c" + col;
-            console.log(cellId);
+            // console.log(cellId);
 
             colElement.className = 'cell';
             colElement.id = cellId;
@@ -282,7 +275,7 @@ function createGameBoard() {
 
             // Copy any islands or waves
             colElement.innerHTML = terrainMap[row][col];
-            console.log(colElement.innerHTML);
+            // console.log(colElement.innerHTML);
 
             // Add mouse click event handler to every cell
             // colElement.addEventListener("click", handleClick);
@@ -331,16 +324,13 @@ function initGameState() {
         cueManOverboard.play();                    
     }
 
-
-    // debugger;
-
     // Create map
     createGameBoard();
 
     // Keep trying to place the ship on the board, don't place it on an island
     for (let validShipRC = false; !validShipRC; ) {
         
-        // The ship starts randomly at the edge of the board
+        // The ship starts randomly at the edge of the board.  Randomly choose an edge:
         // 0 = top, 1 = right, 2 = bottom, 3 = right
         switch (randomInt(4)) {
 
@@ -371,7 +361,7 @@ function initGameState() {
             break;
         }
 
-        // debugger;
+        // Make sure the spot generated doesn't have any terrain in it
         switch (terrainMap[shipRow][shipCol]) {
             case island:
             case wave:
@@ -391,7 +381,7 @@ function initGameState() {
 
     for (let validSwimmerRC = false; !validSwimmerRC; ) {
         
-        console.log(`Randomizing swimmer position`);
+        console.log(`Randomizing Goose position`);
 
         swimmerRow = randRow();
         swimmerCol = randCol();
@@ -409,7 +399,7 @@ function initGameState() {
     newShipCol = shipCol;
 
     console.log(`ship row/col = ${shipRow} / ${shipCol}`);
-    console.log(`swimmer row/col = ${swimmerRow} / ${swimmerCol}`);
+    console.log(`crash site row/col = ${swimmerRow} / ${swimmerCol}`);
 
     drawShip();
     drawSwimmer();
@@ -421,16 +411,17 @@ let displayMessageOnGameLoopNum = -1;
 
 function gameLoop() {
 
-    // Did ship move?
+    // Did ship move in the event handler?
     if ((newShipRow !== shipRow) || (newShipCol !== shipCol)) {
 
+        // Yes it did!
         console.log(`${gameLoopCount}: ship moved from (${shipRow},${shipCol}) to (${newShipRow},${newShipCol}). Swimmer at (${swimmerRow},${swimmerCol})`);
 
         // yes ship moved
         shipRow = newShipRow;
         shipCol = newShipCol;
 
-        // Start audio
+        // Start audio if it hasn't started
         if (musicStarted === false) {
             musicStarted = true;
 
@@ -453,16 +444,17 @@ function gameLoop() {
         drawShip();
     }
 
+    // Get the distance between the ship and the swimmer
     let distance = distanceBetweenShipAndSwimmer();
     
-    // Check if we rescued the swimmer
+    // Check if the ship is in the same square as the swimmerwe rescued the swimmer
     if (distance === 0) {
 
         console.log(`Same square as swimmer!`);
 
         // Start a timer
         if (displayMessageOnGameLoopNum === -1) {
-            displayMessageOnGameLoopNum = gameLoopCount + 150;
+            displayMessageOnGameLoopNum = gameLoopCount + 100;
         }
 
         else if (gameLoopCount >= displayMessageOnGameLoopNum) {
@@ -481,7 +473,7 @@ function gameLoop() {
             cueManRescued.currentTime = 0;
             cueManRescued.play();
     
-            window.alert(`You have rescued sailor ${sailorName}!`);
+            window.alert(`You have rescued aviator ${pilotName}!`);
             initGameState();
             window.requestAnimationFrame(gameLoop);
             displayMessageOnGameLoopNum = -1;
@@ -490,7 +482,7 @@ function gameLoop() {
 
     else {
 
-        // If the ship moved closer to the sailor
+        // If the ship moved closer to the crash site
         if (distance < lastDistance) {
             if (musicStarted) {
                 // we are getting closer
@@ -503,7 +495,7 @@ function gameLoop() {
             lastDistance = distance;
         }
 
-        // If the ship moved away from the sailor
+        // If the ship moved away from the crash site
         else if (distance > lastDistance) {
 
             if (musicStarted) {
@@ -549,12 +541,12 @@ window.alert(
     `water ${wave} or rocks ${island}. Steer around them.\n\n`
 );
 
-// Get sailor's nae
-while ((sailorName === null) || sailorName.length <= 0) {
-    sailorName = prompt("What's the missing pilot's name?", "Lieutenant `Goose` Nick Bradshaw");
+// Get pilot's name
+while ((pilotName === null) || pilotName.length <= 0) {
+    pilotName = prompt("What's the missing pilot's name?", "Lieutenant `Goose` Nick Bradshaw");
 
-    if ((sailorName === null) || sailorName.length <= 0)
-        window.alert("Sailor's name can't be blank!");
+    if ((pilotName === null) || pilotName.length <= 0)
+        window.alert("Pilot's name can't be blank!");
 }
 
 // Start the game
