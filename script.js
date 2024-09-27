@@ -42,8 +42,9 @@ const numIslands = 7;
 const numWaves = 10;
 
 // To draw the ship and swimmer
+const man = `\u{1f3ca}`;                    // Man
 const ship = `\u{1F6A2}`;                   // The ship you drive around
-const swimmer = plane + `\u{1f3ca}`;        // Crash site
+const swimmer = plane + man;                // Crash site
 const ring = `\u{1F6DF}`;                   // The life preserver
 const rescued = ship + ring + swimmer;      // Combination of all 3
 
@@ -533,7 +534,7 @@ drawSwimmer(swimmerRow, swimmerCol);
 // // Show the instructions
 window.alert(
     `Rescue ${ring}Goose!\n\n` +
-    `Maverick and Goose ${swimmer} ejected from their badly damaged ${plane} F-14.\n\n` +
+    `Maverick and Goose ${man} ejected from their badly damaged ${plane} F-14.\n\n` +
     `Unfortunately Goose is unconcious and lost at sea!. Click a box to\n` +
     `move the rescue ${ship} ship to traverse the dangerous waters. A sonar\n` +
     `will tell you if you moving closer or farther from the crash site.\n\n` +
