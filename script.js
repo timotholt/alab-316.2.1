@@ -553,6 +553,12 @@ window.alert(
     `Move to the same square to rescue him!`
 );
 
+window.alert(
+    `Coast Guard ${ring}Rescue!\n\n` +
+    `Note: You can't enter rough water ${wave} or rocks. Steer around them.${island}\n\n` +
+);
+
+
 // Get sailor's nae
 while ((sailorName === null) || sailorName.length <= 0) {
     sailorName = prompt("What's the missing sailors name?", "Davey Jones");
