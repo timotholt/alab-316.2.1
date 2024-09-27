@@ -535,11 +535,11 @@ drawSwimmer(swimmerRow, swimmerCol);
 window.alert(
     `Rescue ${ring}Goose!\n\n` +
     `Maverick and Goose ${man} ejected from their badly damaged ${plane} F-14.\n\n` +
-    `Unfortunately Goose is unconcious and lost at sea!. Click a box to\n` +
-    `move the rescue ${ship} ship to traverse the dangerous waters. A sonar\n` +
-    `will tell you if you moving closer or farther from the crash site.\n\n` +
-    `When you are close, Maverick will point the crash site.  Move the\n` +
-    `ship to the same square to rescue him!`
+    `Unfortunately Goose ${man} is unconcious and lost at sea!. Click a box\n` +
+    `to move the rescue ${ship} ship through the dangerous waters. A sonar\n` +
+    `will tell you if you moving closer or farther from the crash zone.\n\n` +
+    `When you are close, Maverick will point the exact coordinates.\n` +
+    `Move the ship to the same square to rescue him!`
 );
 
 window.alert(
