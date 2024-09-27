@@ -13,7 +13,7 @@ updated to draw the ship in the square you click on.
 
 4. When you get withion 3 spaces of the stranded sailor, you will see him!
 
-5. Click on him to rescue him!
+5. Click on him to rescue him! Wait a second while the crew pulls him up!
 
 Source code at: https://github.com/timotholt/alab-316.2.1
 
