@@ -17,53 +17,40 @@ victoryMusic.volume = victoryVolume;
 let musicStarted = false;
 
 //================================================
-// Create audio for the audio cues
-// 1. A man was spotted on the high seas!
-// 2. His radio signal is getting stronger
-// 3. His radio signal is getting weaker
-// 4. Man overboard!
-// 5. Rescued!
+// Tom Cruise's cues
 //================================================
 
-const cueManOverboard = new Audio(`./manoverboard.mp3`);
-const cueManSpotted   = new Audio(`./manspotted.mp3`);
-const cueManLost      = new Audio(`./manlost.mp3`);
-const cueManRescued   = new Audio(`./manrescued.mp3`);
-// const cueMovingAway   = new Audio(`./movingaway.mp3`);
-// const cueMovingCloser = new Audio(`./movingcloser.mp3`);
+const cueManOverboard = new Audio(`./startrescue.mp3`);
+const cueManSpotted   = new Audio(`./crashsitespotted.mp3`);
+const cueManLost      = new Audio(`./crashsitelost.mp3`);
+const cueManRescued   = new Audio(`./gooserescued.mp3`);
 const cueMovingAway   = new Audio(`./farsonar.mp3`);
 const cueMovingCloser = new Audio(`./closesonar.mp3`);
-
 
 // force window to be a certain size
 let gameHeight = 10;
 let gameWidth = 10;
 window.resizeTo(gameWidth, gameHeight);
 
-// Allocate map
+// Map and map symbols
 const terrainMap = [gameWidth];
-// const wave = `\u{FE4B}`;
-const wave = `\u{A540}`;
-// const wave = '~';
-// const island = `\u{1F3DD}`;
-const island = `\u{1FAA8}`;
-// const island = '*';
-const blank = ' ';
+const wave = `\u{A540}`;                    // Turbulent water
+const island = `\u{1FAA8}`;                 // Land / rocks
+const plane = `\u{2708}`;                   // Crash site
+const blank = ' ';                          // Empty water
 const numIslands = 7;
 const numWaves = 10;
-// let numIslands = 0;
-// let numWaves = 0;
+
+// To draw the ship and swimmer
+const ship = `\u{1F6A2}`;                   // The ship you drive around
+const swimmer = plane + `\u{1f3ca}`;        // Crash site
+const ring = `\u{1F6DF}`;                   // The life preserver
+const rescued = ship + ring + swimmer;      // Combination of all 3
 
 // Random number
 const randomInt = (max) => Math.floor(Math.random() * max); 
 const randRow = () => randomInt(gameHeight);
 const randCol = () => randomInt(gameWidth);
-
-// To draw the ship and swimmer
-const ship = `\u{1F6A2}`;
-const swimmer = `\u{1F3CA}`;
-const ring = `\u{1F6DF}`;
-const rescued = ship + ring + swimmer;
 
 // Distance from ship to swimmer
 const distanceOnTop = 0;          // Ship on top of the swimmer
@@ -545,23 +532,24 @@ drawSwimmer(swimmerRow, swimmerCol);
 
 // // Show the instructions
 window.alert(
-    `Coast Guard ${ring}Rescue!\n\n` +
-    `A ${swimmer} swimmer is lost at sea!. Click a box to move the ${ship} ship\n\n` +
-    `You will be told if you are closer or farther to the swimmer than before.\n\n` +
-    `When you are close you'll be able to see the swimmer. ` +
-    `Move to the same square to rescue him!`
+    `Rescue ${ring}Goose!\n\n` +
+    `Maverick and Goose ${swimmer} ejected from their badly damaged ${plane} F-14.\n\n` +
+    `Unfortunately Goose is unconcious and lost at sea!. Click a box to\n` +
+    `move the rescue ${ship} ship to traverse the dangerous waters. A sonar\n` +
+    `will tell you if you moving closer or farther from the crash site.\n\n` +
+    `When you are close, Maverick will point the crash site.  Move the\n` +
+    `ship to the same square to rescue him!`
 );
 
 window.alert(
-    `Coast Guard ${ring}Rescue!\n\n` +
+    `Rescue ${ring}Goose!\n\n` +
     `Note: You can only move one square at a time, and you can't enter rough` +
     `water ${wave} or rocks ${island}. Steer around them.\n\n`
 );
 
-
 // Get sailor's nae
 while ((sailorName === null) || sailorName.length <= 0) {
-    sailorName = prompt("What's the missing sailors name?", "Davey Jones");
+    sailorName = prompt("What's the missing pilot's name?", "Lieutenant `Goose` Nick Bradshaw");
 
     if ((sailorName === null) || sailorName.length <= 0)
         window.alert("Sailor's name can't be blank!");
