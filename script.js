@@ -7,7 +7,7 @@ const windowWidth = window.innerWidth;
 // Create audio object for the main music played in the game
 // const rescueMusic = new Audio(`./rescue.mp3`);
 const rescueMusic = new Audio(`./topguntheme.mp3`);
-const rescueVolume = 0.6;
+const rescueVolume = 0.8;
 rescueMusic.volume = rescueVolume;
 
 // Create audio object for the victory music
@@ -80,6 +80,7 @@ let lastDrawnShipCol = -1;
 let newShipRow = 0;
 let newShipCol = 0;
 
+// Draw the ship on the board, erasing the old position as necessary
 function drawShip() {
 
     // If the ship has different coordinates from what we last drew it at...
@@ -118,6 +119,7 @@ let lastDrawnSwimmerCol = swimmerCol;
 let swimmerVisible = false;
 let pilotName = null;
 
+// Draw the swimmer on the board, taking distance from the ship into account
 function drawSwimmer() {
 
     // Draw swimmer at new spot if the ship is within a certain distance
@@ -176,8 +178,10 @@ function distanceBetweenShipAndSwimmer() {
     return (distanceBetween(shipCol, shipRow, swimmerCol, swimmerRow));
 }
 
-
+//=================================================
 // Event handler
+//=================================================
+
 function handleClick(event) {
 
     event.stopPropagation();
@@ -212,7 +216,7 @@ function handleClick(event) {
     };
 }
 
-// 
+// Pouplate the map with rocks and waves
 function createGameBoard() {
 
     const appDiv = document.getElementById(`app`);
@@ -450,7 +454,7 @@ function gameLoop() {
     // Check if the ship is in the same square as the swimmerwe rescued the swimmer
     if (distance === 0) {
 
-        console.log(`Same square as swimmer!`);
+        console.log(`Same square as Goose!`);
 
         // Start a timer
         if (displayMessageOnGameLoopNum === -1) {
