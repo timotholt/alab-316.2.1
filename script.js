@@ -555,7 +555,7 @@ window.alert(
 
 window.alert(
     `Coast Guard ${ring}Rescue!\n\n` +
-    `Note: You can't enter rough water ${wave} or rocks. Steer around them.${island}\n\n` +
+    `Note: You can't enter rough water ${wave} or rocks. Steer around them.${island}\n\n`
 );
 
 
