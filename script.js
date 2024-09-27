@@ -1,4 +1,10 @@
+// debugger;
+
+
 console.log(`hello world from alab316.2.1`);
+
+
+// debugger;
 
 // Get current window shape
 const windowHeight = window.innerHeight;
@@ -36,6 +42,20 @@ let gameHeight = 10;
 let gameWidth = 10;
 window.resizeTo(gameWidth, gameHeight);
 
+// Allocate map
+const terrainMap = [gameWidth];
+// const wave = `\u{FE4B}`;
+const wave = `\u{A540}`;
+// const wave = '~';
+// const island = `\u{1F3DD}`;
+const island = `\u{1FAA8}`;
+// const island = '*';
+const blank = ' ';
+const numIslands = 7;
+const numWaves = 10;
+// let numIslands = 0;
+// let numWaves = 0;
+
 // Random number
 const randomInt = (max) => Math.floor(Math.random() * max); 
 const randRow = () => randomInt(gameHeight);
@@ -46,8 +66,6 @@ const ship = `\u{1F6A2}`;
 const swimmer = `\u{1F3CA}`;
 const ring = `\u{1F6DF}`;
 const rescued = ship + ring + swimmer;
-const wave = '\u{FE4B}';
-const blank = '';
 
 // Distance from ship to swimmer
 const distanceOnTop = 0;          // Ship on top of the swimmer
@@ -92,6 +110,7 @@ function drawShip() {
             // console.log(`Erasing old ship location because it was last drawn at ${lastDrawnShipRow} ${lastDrawnShipCol}`);
             // console.log(`calling change text with lastDrawnShipRow = ${lastDrawnShipRow} lastDrawnShipCol = ${lastDrawnShipCol} ${blank}`);
             changeText(lastDrawnShipRow, lastDrawnShipCol, blank);
+            // changeText(lastDrawnShipRow, lastDrawnShipCol, terrainMap[lastDrawnShipRow][lastDrawnShipCol] + blank);
         };
 
         // Draw the ship at the new spot
@@ -100,9 +119,11 @@ function drawShip() {
         // console.log(`Calling change text with shipRow = ${shipRow} shipCol = ${shipCol} ${blank}`);
         
         if (distanceBetweenShipAndSwimmer() === 0) {
+            // changeText(shipRow, shipCol, terrainMap[shipRow][shipCol] + rescued);
             changeText(shipRow, shipCol, rescued)
         }
         else{
+            // changeText(shipRow, shipCol, terrainMap[shipRow][shipCol] + ship);
             changeText(shipRow, shipCol, ship);
         }
 
@@ -128,13 +149,13 @@ function drawSwimmer() {
             return;
 
             // console.log(`1. Erasing old swimmer location because it was last drawn at ${lastDrawnSwimmerRow} ${lastDrawnSwimmerCol}`);
-            changeText(lastDrawnSwimmerRow, lastDrawnSwimmerCol, blank);
+            changeText(lastDrawnSwimmerRow, lastDrawnSwimmerCol, terrainMap[lastDrawnSwimmerRow][lastDrawnSwimmerCol] + blank);
             lastDrawnSwimmerRow = swimmerRow;
             lastDrawnSwimmerCol = swimmerCol;
             swimmerVisible = false;
         }
 
-        changeText(swimmerRow, swimmerCol, swimmer);
+        changeText(swimmerRow, swimmerCol, terrainMap[swimmerRow][swimmerCol] + swimmer);
         // console.log(`2. Drawing swimmer at ${lastDrawnSwimmerRow} ${lastDrawnSwimmerCol}`);
         lastDrawnSwimmerRow = swimmerRow;
         lastDrawnSwimmerCol = swimmerCol;
@@ -151,6 +172,7 @@ function drawSwimmer() {
         // If the swimmer is visible, hide him
         if (swimmerVisible) {
             console.log(`3. Erasing old swimmer location because it was last drawn at ${lastDrawnSwimmerRow} ${lastDrawnSwimmerCol}`);
+            // changeText(lastDrawnSwimmerRow, lastDrawnSwimmerCol, terrainMap[lastDrawnSwimmerRow][lastDrawnSwimmerCol] + blank);
             changeText(lastDrawnSwimmerRow, lastDrawnSwimmerCol, blank);
             lastDrawnSwimmerRow = swimmerRow;
             lastDrawnSwimmerCol = swimmerCol;
@@ -198,16 +220,47 @@ function handleClick(event) {
 
     // Move the ship
     // console.log(`${event.target.id} (row ${sRow}, col ${sCol}) was clicked:`, event);
-    newShipCol = sCol;
-    newShipRow = sRow;
+    
+    // Can't move the ship into an island
+    if (terrainMap[sRow][sCol] === blank) {
+        newShipCol = sCol;
+        newShipRow = sRow;
+    };
 }
 
 // 
 function createGameBoard() {
+
+    // debugger;
+
     const appDiv = document.getElementById(`app`);
 
     // Erase any existing children DIVs
     appDiv.replaceChildren();
+
+    // Make a blank map
+    for (let row = 0; row < gameHeight; row++) {
+        terrainMap[row] = [];
+        for (let col = 0; col < gameWidth; col++) {
+            terrainMap[row][col] = blank;
+
+            console.log(`terrainMap[${row}][${col}] = "${terrainMap[row][col]}"`);
+        }
+    }
+
+    // Randomize the waves
+    for (let i = 0; i < numWaves; i++) {
+        let row = randRow();
+        let col = randCol();
+        terrainMap[row][col] = wave;
+    }
+
+    // Randomize the islands
+    for (let i = 0; i < numIslands; i++) {
+        let row = randRow();
+        let col = randCol();
+        terrainMap[row][col] = island;
+    } 
 
     // Make one div per board square
     for (let row = 0; row < gameHeight; row++) {
@@ -239,6 +292,12 @@ function createGameBoard() {
             colElement.className = 'cell';
             colElement.id = cellId;
             // colElement.innerHTML = cellId;
+
+            debugger;
+            
+            // Copy any islands or waves
+            colElement.innerHTML = terrainMap[row][col];
+            console.log(colElement.innerHTML);
 
             // Add mouse click event handler to every cell
             // colElement.addEventListener("click", handleClick);
@@ -287,49 +346,79 @@ function initGameState() {
         cueManOverboard.play();                    
     }
 
+
+    // debugger;
+
     // Create map
     createGameBoard();
 
-    // The ship starts randomly at the edge of the board
-    // 0 = top, 1 = right, 2 = bottom, 3 = right
-    switch (randomInt(4)) {
+    // Keep trying to place the ship on the board, don't place it on an island
+    for (let validShipRC = false; !validShipRC; ) {
+        
+        // The ship starts randomly at the edge of the board
+        // 0 = top, 1 = right, 2 = bottom, 3 = right
+        switch (randomInt(4)) {
 
-        // Top row
-        case 0:
-            shipRow = 0; 
-            shipCol = randCol();
-            console.log(`Ship at top row`); 
+            // Top row
+            case 0:
+                shipRow = 0; 
+                shipCol = randCol();
+                console.log(`Ship at top row`); 
+                break;
+
+            // Right column
+            case 1:
+                shipCol = gameWidth - 1;
+                shipRow = randRow(); 
+                console.log(`Ship at right column`); 
+                break;
+
+            // Bottom row
+            case 2:
+                shipRow = gameHeight - 1;
+                shipCol = randCol();
+                console.log(`Ship at bottom row`); 
+                break;
+
+            // Left column
+            case 3: shipCol = 0; shipRow = randRow(); 
+            console.log(`Ship at left column`); 
             break;
+        }
 
-        // Right column
-        case 1:
-            shipCol = gameWidth - 1;
-            shipRow = randRow(); 
-            console.log(`Ship at right column`); 
-            break;
-
-        // Bottom row
-        case 2:
-            shipRow = gameHeight - 1;
-            shipCol = randCol();
-            console.log(`Ship at bottom row`); 
-            break;
-
-        // Left column
-        case 3: shipCol = 0; shipRow = randRow(); 
-        console.log(`Ship at left column`); 
-        break;
+        // debugger;
+        switch (terrainMap[shipRow][shipCol]) {
+            case island:
+            case wave:
+                continue;
+    
+            default: 
+                validShipRC = true;
+                break;
+            // case blank:
+            //     validShipRC = true;
+            //     break;
+        }
     }
 
     // Place the swimmer in a random spot, make sure the swimmer is
     // at least a medium distance away
-    do {
+
+    for (let validSwimmerRC = false; !validSwimmerRC; ) {
+        
         console.log(`Randomizing swimmer position`);
 
         swimmerRow = randRow();
         swimmerCol = randCol();
 
-    } while (distanceBetweenShipAndSwimmer() <= distanceIsMedium);
+        // If distance is too close, continue
+        if (distanceBetweenShipAndSwimmer() < distanceIsMedium)
+            continue;
+
+        // If it's a blank spot, and its far away from the ship, the swimmer can go there
+        if (terrainMap[swimmerRow][swimmerCol] === blank) 
+            validSwimmerRC = true;
+    };
 
     newShipRow = shipRow;
     newShipCol = shipCol;
