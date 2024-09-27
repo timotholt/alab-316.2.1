@@ -1,0 +1,65 @@
+/* body {
+  background: #f5f5f4;
+  color: #232323;
+  line-height: 30px;
+  font-size: 20px;
+  font-family: sans-serif;
+  padding: 25px 50px;
+}
+
+code {
+  color: #09507c;
+  background: #deedf2;
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+
+td {
+  border: 1px solid black;
+  padding: 15px;
+}
+
+button {
+  font-size: 20px;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  border-color: #09507c;
+  background-color: #deedf2;
+}
+  */
+
+.row {
+  /* max-width: 40em; */
+  background-color: blue;
+  gap: 0em;
+  width: min-content;
+}
+
+.cell {
+  
+  /* Alignment of the cell contents */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Appearance of the cell itself */
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  background-color: darkblue;
+  color: white;
+  font-size: 2em;
+
+  max-width: 3em;
+  min-width: 3em;
+  min-height: 3em;
+  max-height: 3em;
+}
+
+.cell:hover {
+  background-color: blue;
+}
